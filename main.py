@@ -17,6 +17,26 @@ import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as np
 
+def Visual(X,Y,Z):
+    X = X_train['X'].tolist() + X_test['X'].tolist()
+    Y = X_train['Y'].tolist() + X_test['Y'].tolist()
+    Z = df_train['NTG'].tolist() + y_pred.tolist()
+    # print(X)
+    # print(Y)
+    # print(Z)
+
+    ####визуализация прогноза
+
+    fig = plt.figure()
+    ax = Axes3D(fig)
+    surf = ax.plot_trisurf(X, Y, Z, cmap=cm.jet, linewidth=0.1)
+    fig.colorbar(surf, shrink=0.5, aspect=5)
+    plt.show()
+
+    C = plt.tricontour(X, Y, Z, colors='black', linewidths=1)
+    plt.tricontourf(X, Y, Z)
+    plt.clabel(C, inline=1, fontsize=10)
+    plt.show()
 
 df_test = pd.read_csv('Empty_part.csv')
 df_train = pd.read_csv('Training_wells.csv')
@@ -90,17 +110,18 @@ print(X_train)
 print(y_train)
 print(X_test)
 # линейная регрессия
-# regressor = LinearRegression()
-# regressor.fit(X_train, y_train) #training the algorithm
-# y_pred = regressor.predict(X_test)
-#
-# print(y_pred)
+regressor = LinearRegression()
+regressor.fit(X_train, y_train) #training the algorithm
+y_pred = regressor.predict(X_test)
+
+print(y_pred)
+
 # кнн регрессия
-from sklearn.neighbors import KNeighborsRegressor
-neigh = KNeighborsRegressor(n_neighbors=2)
-neigh.fit(X_train, y_train)
-KNeighborsRegressor(...)
-y_pred=neigh.predict(X_test)
+# from sklearn.neighbors import KNeighborsRegressor
+# neigh = KNeighborsRegressor(n_neighbors=2)
+# neigh.fit(X_train, y_train)
+# KNeighborsRegressor(...)
+# y_pred=neigh.predict(X_test)
 
 print(y_pred)
 ###преобразование для визуализации
@@ -129,6 +150,107 @@ plt.tricontourf(X,Y,Z)
 plt.clabel(C, inline=1, fontsize=10)
 plt.show()
 
+# древесная регерессия
+from sklearn.tree import DecisionTreeRegressor
+
+# create a regressor object
+regressor = DecisionTreeRegressor(random_state=0)
+
+# fit the regressor with X and Y data
+regressor.fit(X_train, y_train)
+y_pred = regressor.predict(X_test)
+
+###преобразование для визуализации
+X_train
+X_test
+
+y_pred
+print(y_train)
+X = X_train['X'].tolist() + X_test['X'].tolist()
+Y = X_train['Y'].tolist() + X_test['Y'].tolist()
+Z = df_train['NTG'].tolist() + y_pred.tolist()
+# print(X)
+# print(Y)
+# print(Z)
+
+####визуализация прогноза
+
+fig = plt.figure()
+ax = Axes3D(fig)
+surf = ax.plot_trisurf(X, Y, Z, cmap=cm.jet, linewidth=0.1)
+fig.colorbar(surf, shrink=0.5, aspect=5)
+plt.show()
+
+C = plt.tricontour(X, Y, Z, colors='black', linewidths=1)
+plt.tricontourf(X, Y, Z)
+plt.clabel(C, inline=1, fontsize=10)
+plt.show()
+
+
+## метод рандомной древесины
+from sklearn.ensemble import RandomForestClassifier
+forest = RandomForestClassifier()
+forest.fit(X_train, y_train)
+y_pred = forest.predict(X_test)
+###преобразование для визуализации
+X_train
+X_test
+y_pred
+print (y_train)
+X=X_train['X'].tolist() + X_test['X'].tolist()
+Y=X_train['Y'].tolist() + X_test['Y'].tolist()
+Z=df_train['NTG'].tolist() + y_pred.tolist()
+# print(X)
+# print(Y)
+# print(Z)
+
+####визуализация прогноза
+
+fig = plt.figure()
+ax = Axes3D(fig)
+surf = ax.plot_trisurf(X, Y, Z, cmap=cm.jet, linewidth=0.1)
+fig.colorbar(surf, shrink=0.5, aspect=5)
+plt.show()
+
+C=plt.tricontour(X,Y,Z,colors='black',linewidths=1)
+plt.tricontourf(X,Y,Z)
+plt.clabel(C, inline=1, fontsize=10)
+plt.show()
+
+
+# метод опорных векторв
+from sklearn import svm
+support = svm.SVC()
+support.fit(X_train, y_train)
+pred = support.predict(X_test)
+
+
+###преобразование для визуализации
+X_train
+X_test
+
+
+y_pred
+print (y_train)
+X=X_train['X'].tolist() + X_test['X'].tolist()
+Y=X_train['Y'].tolist() + X_test['Y'].tolist()
+Z=df_train['NTG'].tolist() + y_pred.tolist()
+# print(X)
+# print(Y)
+# print(Z)
+
+####визуализация прогноза
+
+fig = plt.figure()
+ax = Axes3D(fig)
+surf = ax.plot_trisurf(X, Y, Z, cmap=cm.jet, linewidth=0.1)
+fig.colorbar(surf, shrink=0.5, aspect=5)
+plt.show()
+
+C=plt.tricontour(X,Y,Z,colors='black',linewidths=1)
+plt.tricontourf(X,Y,Z)
+plt.clabel(C, inline=1, fontsize=10)
+plt.show()
 # df_test = pd.read_csv('Empty_part.csv')
 # df_train = pd.read_csv('Training_wells.csv')
 # #df_train = pd.read_csv('train.csv')
