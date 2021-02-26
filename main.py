@@ -1,3 +1,4 @@
+import matplotlib
 from sklearn.linear_model import LinearRegression
 from sklearn.neighbors import KNeighborsClassifier
 import pandas as pd
@@ -110,18 +111,18 @@ print(X_train)
 print(y_train)
 print(X_test)
 # линейная регрессия
-regressor = LinearRegression()
-regressor.fit(X_train, y_train) #training the algorithm
-y_pred = regressor.predict(X_test)
-
-print(y_pred)
+# regressor = LinearRegression()
+# regressor.fit(X_train, y_train) #training the algorithm
+# y_pred = regressor.predict(X_test)
+#
+# print(y_pred)
 
 # кнн регрессия
-# from sklearn.neighbors import KNeighborsRegressor
-# neigh = KNeighborsRegressor(n_neighbors=2)
-# neigh.fit(X_train, y_train)
-# KNeighborsRegressor(...)
-# y_pred=neigh.predict(X_test)
+from sklearn.neighbors import KNeighborsRegressor
+neigh = KNeighborsRegressor(n_neighbors=2)
+neigh.fit(X_train, y_train)
+KNeighborsRegressor(...)
+y_pred=neigh.predict(X_test)
 
 print(y_pred)
 ###преобразование для визуализации
@@ -149,6 +150,59 @@ C=plt.tricontour(X,Y,Z,colors='black',linewidths=1)
 plt.tricontourf(X,Y,Z)
 plt.clabel(C, inline=1, fontsize=10)
 plt.show()
+
+# ######
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import axes3d
+
+# %matplotlib inline
+import random
+# set seed to reproducible
+# random.seed(1)
+# попробовать заунилть координаты
+x = X_train['X'].tolist()
+y = X_train['Y'].tolist()
+z = df_train['NTG'].tolist()
+fig = plt.figure(figsize=(10,6))
+ax = axes3d.Axes3D(fig)
+ax.scatter3D(x,y,z, c='r')
+
+
+x_grid = np.linspace(min(x)+1, max(x)-1, len(x))
+y_grid = np.linspace(min(y)+1, max(y)-1, len(y))
+
+B1, B2 = np.meshgrid(x_grid, y_grid, indexing='xy')
+Z = np.zeros(( len(x), len(y) ))
+
+import scipy as sp
+import scipy.interpolate
+spline = sp.interpolate.Rbf(x,y,z,function='thin_plate')
+
+Z = spline(B1,B2)
+
+Visual(x,y,z)
+
+fig = plt.figure()
+ax = Axes3D(fig)
+surf = ax.plot_surface(B1, B2, Z, cmap=cm.jet, linewidth=0.1)
+fig.colorbar(surf, shrink=0.5, aspect=5)
+plt.show()
+
+C = plt.contour(B1, B2, Z, colors='black', linewidths=1)
+plt.contourf(B1, B2, Z)
+plt.clabel(C, inline=1, fontsize=10)
+plt.show()
+# Visual(B1,B2,Z)
+fig = plt.figure(figsize=(10,6))
+ax = axes3d.Axes3D(fig)
+ax.plot_wireframe(B1, B2, Z)
+ax.plot_surface(B1, B2, Z,alpha=0.2)
+ax.scatter3D(x,y,z, c='r')
+
+
+# ########
 
 # древесная регерессия
 from sklearn.tree import DecisionTreeRegressor
@@ -251,6 +305,9 @@ C=plt.tricontour(X,Y,Z,colors='black',linewidths=1)
 plt.tricontourf(X,Y,Z)
 plt.clabel(C, inline=1, fontsize=10)
 plt.show()
+
+
+
 # df_test = pd.read_csv('Empty_part.csv')
 # df_train = pd.read_csv('Training_wells.csv')
 # #df_train = pd.read_csv('train.csv')
