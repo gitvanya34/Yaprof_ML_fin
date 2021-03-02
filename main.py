@@ -117,6 +117,89 @@ print(X_test)
 #
 # print(y_pred)
 
+# ######
+# ######
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import axes3d
+
+# %matplotlib inline
+import random
+
+# set seed to reproducible
+# random.seed(1)
+# попробовать заунилть координаты
+x = X_train['X'].tolist()
+y = X_train['Y'].tolist()
+z = df_train['NTG'].tolist()
+fig = plt.figure(figsize=(10, 6))
+ax = axes3d.Axes3D(fig)
+ax.scatter3D(x, y, z, c='r')
+
+x_grid = np.linspace(201, 246, 46)
+y_grid = np.linspace(901, 930, 30)
+
+B1, B2 = np.meshgrid(x_grid, y_grid, indexing='xy')
+Z = np.zeros((len(x), len(y)))
+
+import scipy as sp
+import scipy.interpolate
+
+spline = sp.interpolate.Rbf(x, y, z, function='thin_plate')
+
+Z = spline(B1, B2)
+
+np.savetxt('B1.csv', B1, delimiter=',')
+np.savetxt('B2.csv', B2, delimiter=',')
+np.savetxt('Z.csv', Z, delimiter=',')
+
+df_exportSpline = pd.read_csv('Empty_part.csv')
+x = df_exportSpline['X'].tolist()
+y = df_exportSpline['Y'].tolist()
+
+# for xy in df_exportSpline:
+#     for b1 in B1:
+#         if b1==xy['X']:
+#             for b2 in B2:
+#                 if b2 ==xy['Y']:
+#                     z_arr.append()
+
+print(len(B1))
+count = 0
+print(Z[29][45])
+arr = []
+for i in x:
+    for j in y:
+        arr.append(Z[j - 901][i - 201])
+print(arr)
+
+Visual(x, y, z)
+VisualF(B1, B2, Z)
+
+print(B1)
+print(B2)
+print(Z)
+
+# Visual(B1,B2,Z)
+fig = plt.figure(figsize=(10, 6))
+ax = axes3d.Axes3D(fig)
+ax.plot_wireframe(B1, B2, Z)
+ax.plot_surface(B1, B2, Z, alpha=0.2)
+ax.scatter3D(x, y, z, c='r')
+
+# for k in range(1,len(df_exportSpline)):
+#     for i in range(0,len(B1)):
+#         for j in range(0,len(B2)):
+#             if(df_exportSpline[1][k]==B1[i][0] and df_exportSpline[2][k]==B2[0][j]):
+#                 count+=1
+# print(df_exportSpline[0][0])
+
+print(B1[0][0])
+print(B2[0][0])
+print(count)
+# ########
+# ########
 # кнн регрессия
 from sklearn.neighbors import KNeighborsRegressor
 neigh = KNeighborsRegressor(n_neighbors=2)
